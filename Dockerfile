@@ -52,15 +52,41 @@ RUN apt-get update \
   && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
   && apt-get -y install nodejs \
   #
+  # Install Go
+  && wget -q https://dl.google.com/go/go1.12.7.linux-amd64.tar.gz -O go1.12.7.linux-amd64.tar.gz \
+  && tar -C /usr/local -xzf go1.12.7.linux-amd64.tar.gz \
+  && echo 'PATH=$PATH:/usr/local/go/bin' \
+  # Install Go tools
+  && /usr/local/go/bin/go get -u -v \
+  github.com/uudashr/gopkgs/cmd/gopkgs \
+  github.com/ramya-rao-a/go-outline \
+  github.com/acroca/go-symbols \
+  github.com/godoctor/godoctor \
+  golang.org/x/tools/cmd/guru \
+  golang.org/x/tools/cmd/gorename \
+  github.com/rogpeppe/godef \
+  github.com/zmb3/gogetdoc \
+  github.com/haya14busa/goplay/cmd/goplay \
+  github.com/sqs/goreturns \
+  github.com/josharian/impl \
+  github.com/davidrjenni/reftools/cmd/fillstruct \
+  github.com/fatih/gomodifytags \
+  github.com/cweill/gotests/... \
+  golang.org/x/tools/cmd/goimports \
+  golang.org/x/lint/golint \
+  golang.org/x/tools/cmd/gopls \
+  github.com/alecthomas/gometalinter \
+  honnef.co/go/tools/... \
+  github.com/golangci/golangci-lint/cmd/golangci-lint \
+  github.com/mgechev/revive \
+  github.com/derekparker/delve/cmd/dlv 2>&1  \
+  #
   # Install OhMyZsh
   && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" \
   && chsh -s $(which zsh) \
   #
-  # Install Go
-  && wget -q https://dl.google.com/go/go1.12.7.linux-amd64.tar.gz -O go1.12.7.linux-amd64.tar.gz \
-  && tar -C /usr/local -xzf go1.12.7.linux-amd64.tar.gz \
-  && echo 'PATH=$PATH:/usr/local/go/bin' >> /root/.zshrc
-
+  && echo 'PATH=$PATH:/usr/local/go/bin' >> /root/.zshrc 
+#
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
 
