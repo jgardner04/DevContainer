@@ -25,6 +25,7 @@ RUN apt-get update \
   jq \
   vim \
   unzip \
+  build-essential \
   #
   # Install Kubectl
   && curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - \
