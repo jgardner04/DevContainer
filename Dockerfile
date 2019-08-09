@@ -3,6 +3,14 @@ FROM ubuntu:latest
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
 
+# This Dockerfile adds a non-root 'vscode' user with sudo access. However, for Linux,
+# this user's GID/UID must match your local user UID/GID to avoid permission issues
+# with bind mounts. Update USER_UID / USER_GID if yours is not 1000. See
+# https://aka.ms/vscode-remote/containers/non-root-user for details.
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
 # Terraform and tflint versions
 ARG TERRAFORM_VERSION=0.12.5
 ARG TFLINT_VERSION=0.9.3
@@ -88,11 +96,20 @@ RUN apt-get update \
   github.com/mgechev/revive \
   github.com/derekparker/delve/cmd/dlv 2>&1  \
   #
+  # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
+  && groupadd --gid $USER_GID $USERNAME \
+  && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+  # [Optional] Add sudo support
+  && apt-get install -y sudo \
+  && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+  && chmod 0440 /etc/sudoers.d/$USERNAME \
+  #
   # Install OhMyZsh
   && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" \
   && chsh -s $(which zsh) \
   #
-  && echo 'PATH=$PATH:/usr/local/go/bin' >> /root/.zshrc 
+  && echo 'PATH=$PATH:/usr/local/go/bin' >> /root/.zshrc \
+  && echo 'alias python=python3' >> /root/.zshrc 
 #
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
