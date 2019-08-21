@@ -26,6 +26,7 @@ RUN apt-get update \
   apt-transport-https \
   lsb-release \
   gnupg \
+  gettext \
   wget \
   gpg \
   git \
@@ -43,9 +44,13 @@ RUN apt-get update \
   && apt-get update \
   && apt-get install -y kubectl \
   #
+  # Install Helm
+  && curl -LO https://git.io/get_helm.sh \
+  && chmod 700 get_helm.sh \
+  && ./get_helm.sh \
+  #
   # Install Azure CLI
   && curl -sL https://aka.ms/InstallAzureCLIDeb | bash \
-  #
   #
   # Install Terraform, tflint, and graphviz
   && mkdir -p /tmp/docker-downloads \
@@ -64,6 +69,7 @@ RUN apt-get update \
   && curl -sSL -o /tmp/hashicorp-downloads/packer.zip https://releases.hashicorp.com/packer/1.4.3/packer_${PACKER_VERSION}_linux_amd64.zip \
   && unzip /tmp/hashicorp-downloads/packer.zip \
   && mv packer /usr/local/bin \
+  #
   # Install .NET
   && wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
   && dpkg -i packages-microsoft-prod.deb \
@@ -104,12 +110,12 @@ RUN apt-get update \
   github.com/derekparker/delve/cmd/dlv 2>&1  \
   #
   # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
-  && groupadd --gid $USER_GID $USERNAME \
-  && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
-  # [Optional] Add sudo support
-  && apt-get install -y sudo \
-  && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-  && chmod 0440 /etc/sudoers.d/$USERNAME \
+  # && groupadd --gid $USER_GID $USERNAME \
+  # && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+  # # [Optional] Add sudo support
+  # && apt-get install -y sudo \
+  # && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+  # && chmod 0440 /etc/sudoers.d/$USERNAME \
   #
   # Install OhMyZsh
   && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" \
