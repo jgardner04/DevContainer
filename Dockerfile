@@ -76,6 +76,7 @@ RUN mkdir -p /tmp/docker-downloads \
   && curl -sSL -o /tmp/docker-downloads/tflint.zip https://github.com/wata727/tflint/releases/download/v${TFLINT_VERSION}/tflint_linux_amd64.zip \
   && sudo unzip /tmp/docker-downloads/tflint.zip \
   && sudo mv tflint /usr/local/bin \
+  && export PATH=/usr/local/tflint/bin:$PATH \
   && cd ~ \
   && rm -rf /tmp/docker-downloads \
   && sudo apt-get install -y graphviz
@@ -136,6 +137,7 @@ RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh
 #
 # Add Alias
 RUN echo 'PATH=$PATH:/usr/local/go/bin' >> /home/${USERNAME}/.zshrc \
+  && echo 'export PATH=/usr/local/tflint/bin:$PATH' >> /home/${USERNAME}/.zshrc \
   & echo 'alias python=python3' >> /home/${USERNAME}/.zshrc
 
 # Switch back to dialog for any ad-hoc use of apt-get
