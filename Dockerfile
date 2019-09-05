@@ -137,15 +137,15 @@ RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh
   && git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
 #
 # Add ZSH Config file
-RUN mv /home/${USERNAME}/.zshrc /home/${USERNAME}/.zshrc.orig
-COPY --chown=${USERNAME} .zshrc /home/${USERNAME}/.zshrc
-COPY --chown=${USERNAME} .p10k.zsh /home/${USERNAME}/.p10k.zsh
+RUN mv /home/$USERNAME/.zshrc /home/$USERNAME/.zshrc.orig
+COPY --chown=$USERNAME .zshrc /home/$USERNAME/.zshrc
+COPY --chown=$USERNAME .p10k.zsh /home/$USERNAME/.p10k.zsh
 
 #
 # Add Alias
-RUN echo 'PATH=$PATH:/usr/local/go/bin' >> /home/${USERNAME}/.zshrc \
-  && echo 'export PATH=/usr/local/tflint/bin:$PATH' >> /home/${USERNAME}/.zshrc \
-  & echo 'alias python=python3' >> /home/${USERNAME}/.zshrc
+RUN echo 'PATH=$PATH:/usr/local/go/bin' >> /home/$USERNAME/.zshrc \
+  && echo 'export PATH=/usr/local/tflint/bin:$PATH' >> /home/$USERNAME/.zshrc \
+  & echo 'alias python=python3' >> /home/$USERNAME/.zshrc
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
