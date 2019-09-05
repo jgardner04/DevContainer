@@ -138,8 +138,8 @@ RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh
 #
 # Add ZSH Config file
 RUN mv /home/${USERNAME}/.zshrc /home/${USERNAME}/.zshrc.orig
-COPY --chown=${USERNAME}:${USERNAME} .zshrc /home/${USERNAME}/.zshrc
-COPY --chown=${USERNAME}:${USERNAME} .p10k.zsh /home/${USERNAME}/.p10k.zsh
+COPY --chown=${USERNAME} .zshrc /home/${USERNAME}/.zshrc
+COPY --chown=${USERNAME} .p10k.zsh /home/${USERNAME}/.p10k.zsh
 
 #
 # Add Alias
