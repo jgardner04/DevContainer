@@ -133,7 +133,14 @@ RUN /usr/local/go/bin/go get -u -v \
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" \
   && sudo chsh -s $(which zsh) \
   &&  git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-completions \
-  && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+  && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting \
+  && git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+#
+# Add ZSH Config file
+RUN mv /home/${USERNAME}/.zshrc /home/${USERNAME}/.zshrc.orig
+COPY --chown=${USERNAME}:${USERNAME} .zshrc /home/${USERNAME}/.zshrc
+COPY --chown=${USERNAME}:${USERNAME} .p10k.zsh /home/${USERNAME}/.p10k.zsh
+
 #
 # Add Alias
 RUN echo 'PATH=$PATH:/usr/local/go/bin' >> /home/${USERNAME}/.zshrc \
